@@ -1,0 +1,9 @@
+* text=auto eol=lf
+*.md text diff=markdown
+
+# There aren't any binary files (e.g. `*.png binary`) in here because
+# there aren't any in the repository yet.
+#
+# We add types to this file in the same commit as when we first add a
+# file of that type to the repository, rather than cluttering this list
+# with things that we'll never care about.
