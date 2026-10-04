@@ -2,8 +2,10 @@
 # and then, but don't take a release younger than a week; we want to give the
 # internet a chance to find any problems before we do.
 #
-# We also need to manually keep `min_version` in sync with
-# `.github/workflows/ci.yml`•`jdx/mise-action`•`version`.
+# Keep `min_version` in sync with:
+#
+# - `.github/workflows/ci.yml`•`jdx/mise-action`•`version`
+# - mise's schema URL in `.config/tombi.toml`.
 min_version = "2026.9.13"
 
 [settings]
@@ -29,7 +31,18 @@ run = "editorconfig-checker"
 description = "Lint Markdown files"
 run = "rumdl check --deny-config-warnings"
 
+[tasks."lint:toml"]
+description = "Lint TOML files"
+run = [
+  "tombi lint --error-on-warnings .",
+  "tombi format --check --diff .",
+]
+
 # Nothing updates these tools for us. Run `mise outdated --bump` now and then.
+#
+# Tools marked with [SCHEMA] have a versioned schema URL in `.config/tombi.toml`
+# that must be kept in sync.
 [tools]
 editorconfig-checker = "4.0.2"  # Lint files against .editorconfig
-rumdl = "0.2.77"                # Lint Markdown files
+rumdl = "0.2.77"                # Lint Markdown files              [SCHEMA]
+tombi = "1.5.5"                 # Lint TOML files

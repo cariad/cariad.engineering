@@ -41,6 +41,9 @@ jobs:
       - name: Lint Markdown files
         run: mise run lint:markdown
 
+      - name: Lint TOML files
+        run: mise run lint:toml
+
       # New linters added to `.config/mise.toml` must be added and run here
       # individually.
       #
