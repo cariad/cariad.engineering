@@ -40,6 +40,8 @@ run = [
 
 [tasks."lint:web"]
 description = "Lint web files"
+# Biome skips files that aren't valid UTF-8 without failing them, so we run
+# `lint:editorconfig` first and hope its `charset` check catches most of them.
 depends = ["lint:editorconfig"]
 run = "biome check --error-on-warnings"
 
