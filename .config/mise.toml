@@ -38,11 +38,17 @@ run = [
   "tombi format --check --diff .",
 ]
 
+[tasks."lint:web"]
+description = "Lint web files"
+depends = ["lint:editorconfig"]
+run = "biome check --error-on-warnings"
+
 # Nothing updates these tools for us. Run `mise outdated --bump` now and then.
 #
 # Tools marked with [SCHEMA] have a versioned schema URL in `.config/tombi.toml`
 # that must be kept in sync.
 [tools]
+biome = "2.5.14"                # Lint web files
 editorconfig-checker = "4.0.2"  # Lint files against .editorconfig
 rumdl = "0.2.77"                # Lint Markdown files              [SCHEMA]
 tombi = "1.5.5"                 # Lint TOML files
