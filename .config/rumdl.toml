@@ -1,3 +1,6 @@
+[line-length]
+line-length = 0  # No maximum line length
+
 [list-continuation-indent]
 style = "aligned"  # List content must align with parent item's text
 
