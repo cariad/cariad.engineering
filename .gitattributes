@@ -1,8 +1,10 @@
 * text=auto eol=lf
 
+*.hcl          text
 *.json         text
 *.lock         text
 *.md           text diff=markdown
+*.tf           text
 *.toml         text
 *.yml          text
 

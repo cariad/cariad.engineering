@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "EditorConfig.EditorConfig",
+    "OpenTofu.vscode-opentofu",
     "biomejs.biome",
     "rvben.rumdl",
     "tombi-toml.tombi"
