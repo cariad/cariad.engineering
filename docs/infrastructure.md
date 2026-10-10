@@ -32,3 +32,21 @@ This is the **only** infrastructure you deploy from your local machine.
    ```
 
 1. Delete the API key in the Scaleway console.
+
+## Blog
+
+The blog's infrastructure is described in `infra/blog/` and deployed to [bunny.net](https://bunny.net).
+
+### Planning changes
+
+1. Set your bunny.net API key in your shell:
+
+   ```bash
+   export BUNNYNET_API_KEY="..."
+   ```
+
+1. Show a plan:
+
+   ```bash
+   mise run infra:blog
+   ```
