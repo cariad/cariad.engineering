@@ -13,33 +13,53 @@ min_version = "2026.9.13"
 minimum_release_age = "7d"
 
 [tasks."infra:blog"]
-depends = ["lint:infra-blog"]
+depends = ["lint-infra:blog"]
 description = "Show a plan for the blog infrastructure"
 dir = "{{ config_root }}/infra/blog"
-run = "tofu plan"
+run = [
+  # `lint-infra:blog` runs first and does initialise the module — but it
+  # initialises with `-backend=false`, so it doesn't set up the backend, so we
+  # have to initialise it again ourselves.
+  #
+  # - `-input=false` — headless initialisation.
+  # - `-lockfile=readonly` — don't update `.terraform.lock.hcl`.
+  "tofu init -input=false -lockfile=readonly",
+  "tofu plan",
+]
 
 [tasks."infra:bootstrap"]
-depends = ["lint:infra-bootstrap"]
+depends = ["lint-infra:bootstrap"]
 description = "Show a plan for the infrastructure bootstrap"
 dir = "{{ config_root }}/infra/bootstrap"
 run = "tofu plan"
 
-[tasks.lint]
-# We don't run this task in CI. We give each linter its own named step in
-# `.github/workflows/ci.yml`•`jobs`•`lint`•`steps` so failures are quick to
-# spot.
+[tasks.lint-content]
+# Lints everything except the OpenTofu files, so it needs no OpenTofu providers
+# or cloud credentials.
+#
+# We don't run this task or `lint-infra` in CI. We give each linter its own
+# named step in `.github/workflows/ci.yml`•`jobs`•`lint`•`steps` so failures are
+# quick to spot.
 #
 # We intentionally stop on the first failure because fixing one problem usually
 # fixes others, and there's no point burning time and electrons on a report
 # that falls out of date before we can finish reading it.
-description = "Run the linters, stopping at the first failure"
+description = "Run the content linters"
 depends = ["lint:*"]
 
-[tasks."lint:editorconfig"]
-description = "Lint files against .editorconfig"
-run = "editorconfig-checker"
+[tasks.lint-infra]
+# Lints the OpenTofu files, so you only need to run it after changing
+# infrastructure.
+#
+# Once you've planned a module that has a remote backend, it needs the backend's
+# credentials too (see `infra:blog`).
+#
+# Like `lint-content`, we don't run this task in CI, and it stops on the first
+# failure.
+description = "Run the infrastructure linters"
+depends = ["lint-infra:*"]
 
-[tasks."lint:infra-blog"]
+[tasks."lint-infra:blog"]
 description = "Lint the blog OpenTofu files"
 dir = "{{ config_root }}/infra/blog"
 run = [
@@ -57,7 +77,7 @@ run = [
   "tofu validate",
 ]
 
-[tasks."lint:infra-bootstrap"]
+[tasks."lint-infra:bootstrap"]
 description = "Lint the bootstrap OpenTofu files"
 dir = "{{ config_root }}/infra/bootstrap"
 run = [
@@ -74,6 +94,13 @@ run = [
   # Check files describe valid infrastructure:
   "tofu validate",
 ]
+# When both modules are linting at the same time, we want the two inits to run
+# in series. A shared provider cache isn't safe for concurrent inits.
+wait_for = ["lint-infra:blog"]
+
+[tasks."lint:editorconfig"]
+description = "Lint files against .editorconfig"
+run = "editorconfig-checker"
 
 [tasks."lint:markdown"]
 description = "Lint Markdown files"
