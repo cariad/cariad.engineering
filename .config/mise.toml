@@ -33,7 +33,6 @@ depends = ["lint:*"]
 description = "Lint files against .editorconfig"
 run = "editorconfig-checker"
 
-
 [tasks."lint:infra-bootstrap"]
 description = "Lint the bootstrap OpenTofu files"
 dir = "{{ config_root }}/infra/bootstrap"
