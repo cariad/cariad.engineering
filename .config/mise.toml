@@ -12,6 +12,12 @@ min_version = "2026.9.13"
 # Hide releases younger than a week from `mise outdated --bump`
 minimum_release_age = "7d"
 
+[tasks."infra:blog"]
+depends = ["lint:infra-blog"]
+description = "Show a plan for the blog infrastructure"
+dir = "{{ config_root }}/infra/blog"
+run = "tofu plan"
+
 [tasks."infra:bootstrap"]
 depends = ["lint:infra-bootstrap"]
 description = "Show a plan for the infrastructure bootstrap"
@@ -32,6 +38,24 @@ depends = ["lint:*"]
 [tasks."lint:editorconfig"]
 description = "Lint files against .editorconfig"
 run = "editorconfig-checker"
+
+[tasks."lint:infra-blog"]
+description = "Lint the blog OpenTofu files"
+dir = "{{ config_root }}/infra/blog"
+run = [
+  # Check files are formatted correctly:
+  "tofu fmt -check -diff -recursive",
+  # `tofu validate` requires each root module to have been initialised, which
+  # they won't be yet on fresh clones -- so do it!
+  #
+  # - `-backend=false` — don't touch state.
+  # - `-input=false` — headless initialisation.
+  # - `-lockfile=readonly` — don't update `.terraform.lock.hcl`, and fail if
+  #   providers were added or removed (other drift only warns).
+  "tofu init -backend=false -input=false -lockfile=readonly",
+  # Check files describe valid infrastructure:
+  "tofu validate",
+]
 
 [tasks."lint:infra-bootstrap"]
 description = "Lint the bootstrap OpenTofu files"
@@ -75,6 +99,7 @@ biome = "2.5.14"                # Lint web files
 editorconfig-checker = "4.0.2"  # Lint files against .editorconfig
 # Keep in sync with:
 #
+# - `infra/blog/versions.tf`•`terraform`•`required_version`
 # - `infra/bootstrap/versions.tf`•`terraform`•`required_version`
 opentofu = "1.12.6"             # Infrastructure as code
 # Keep in sync with schema URL in `.config/tombi.toml`:

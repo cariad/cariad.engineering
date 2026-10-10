@@ -41,6 +41,9 @@ jobs:
       - name: Lint Markdown files
         run: mise run lint:markdown
 
+      - name: Lint blog infrastructure files
+        run: mise run lint:infra-blog
+
       - name: Lint infrastructure bootstrap files
         run: mise run lint:infra-bootstrap
 
