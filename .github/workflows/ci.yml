@@ -42,10 +42,10 @@ jobs:
         run: mise run lint:markdown
 
       - name: Lint blog infrastructure files
-        run: mise run lint:infra-blog
+        run: mise run lint-infra:blog
 
       - name: Lint infrastructure bootstrap files
-        run: mise run lint:infra-bootstrap
+        run: mise run lint-infra:bootstrap
 
       - name: Lint TOML files
         run: mise run lint:toml
@@ -56,7 +56,8 @@ jobs:
       # New linters added to `.config/mise.toml` must be added and run here
       # individually.
       #
-      # We intentionally don't run `mise run lint`, because we want to see a
-      # specific named step (i.e. a specific named linter) fail if a problem is
-      # detected, rather than just have a generic "lint" step fail and have to
-      # scrutinise the logs to figure out which one.
+      # We intentionally don't run `mise run lint-content` or
+      # `mise run lint-infra`, because we want to see a specific named step
+      # (i.e. a specific named linter) fail if a problem is detected, rather
+      # than just have a generic "lint" step fail and have to scrutinise the
+      # logs to figure out which one.
