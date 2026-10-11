@@ -9,6 +9,7 @@
 *.yml          text
 
 .editorconfig  text
+.env.example   text
 .gitattributes text
 .gitignore     text
 LICENSE        text

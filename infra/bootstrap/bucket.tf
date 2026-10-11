@@ -1,4 +1,6 @@
 # Holds the OpenTofu state for `infra/blog/`.
+#
+# `name` and `region` must match `infra/blog/backend.tf`•`terraform`•`backend`.
 resource "scaleway_object_bucket" "state" {
   name       = "cariad-engineering-tofu-state-v0"
   project_id = scaleway_account_project.state.id
