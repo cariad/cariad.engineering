@@ -13,18 +13,17 @@ min_version = "2026.9.13"
 minimum_release_age = "7d"
 
 [tasks."infra:blog"]
-depends = ["lint-infra:blog"]
 description = "Show a plan for the blog infrastructure"
 dir = "{{ config_root }}/infra/blog"
+env = { _.file = { path = ".env", redact = true } }
 run = [
-  # `lint-infra:blog` runs first and does initialise the module — but it
-  # initialises with `-backend=false`, so it doesn't set up the backend, so we
-  # have to initialise it again ourselves.
+  # Initialise the module, including its remote backend.
   #
   # - `-input=false` — headless initialisation.
   # - `-lockfile=readonly` — don't update `.terraform.lock.hcl`.
   "tofu init -input=false -lockfile=readonly",
-  "tofu plan",
+  # `-lock=false` — don't lock the state during the plan.
+  "tofu plan -lock=false",
 ]
 
 [tasks."infra:bootstrap"]
@@ -62,6 +61,7 @@ depends = ["lint-infra:*"]
 [tasks."lint-infra:blog"]
 description = "Lint the blog OpenTofu files"
 dir = "{{ config_root }}/infra/blog"
+env = { _.file = { path = ".env", redact = true } }
 run = [
   # Check files are formatted correctly:
   "tofu fmt -check -diff -recursive",

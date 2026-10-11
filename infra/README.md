@@ -66,3 +66,25 @@ OpenTofu doesn't create these, because it would store their secrets in the boots
    New policies can take up to 5 minutes to take effect, so if a key gets "access denied" straight after the bootstrap, wait a few minutes and try again.
 
 1. Store both keys somewhere safe.
+
+1. Create a `.env` file from the example:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+1. Fill in `.env`:
+
+   - `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`: the `cariad-engineering-tofu-state-reader` key pair created above.
+
+     OpenTofu reads the state through Scaleway's S3-compatible API, so the Scaleway key goes in the `AWS_*` variables.
+
+   - `BUNNYNET_API_KEY`: your bunny.net API key.
+
+   Git ignores `.env`, so your keys stay on your machine.
+
+## 3. Plan changes to the blog
+
+```bash
+mise run infra:blog
+```
