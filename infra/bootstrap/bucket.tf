@@ -1,14 +1,6 @@
-# This module creates a bucket to hold the OpenTofu state for `infra/blog/`.
-#
-# Scaleway can limit an API key's access to Object Storage only by project (not
-# by bucket, as you might expect), so the bucket gets its own project.
-resource "scaleway_account_project" "state" {
-  description = "OpenTofu state for cariad.engineering"
-  name        = "cariad-engineering-tofu-state"
-}
-
+# Holds the OpenTofu state for `infra/blog/`.
 resource "scaleway_object_bucket" "state" {
-  name       = "cariad-engineering-tofu-state"
+  name       = "cariad-engineering-tofu-state-v0"
   project_id = scaleway_account_project.state.id
   region     = "fr-par"
 
@@ -31,6 +23,7 @@ resource "scaleway_object_bucket" "state" {
   }
 }
 
+# Encrypt the state because it holds bunny.net secrets.
 resource "scaleway_object_bucket_server_side_encryption_configuration" "state" {
   bucket     = scaleway_object_bucket.state.name
   project_id = scaleway_object_bucket.state.project_id
