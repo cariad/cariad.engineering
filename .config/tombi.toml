@@ -1,0 +1,5 @@
+toml-version = "v1.0.0"
+
+[format.rules]
+line-width = 80
+trailing-comment-alignment = true

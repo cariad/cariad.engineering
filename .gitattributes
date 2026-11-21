@@ -1,0 +1,10 @@
+* text=auto eol=lf
+
+*.lock         text
+*.md           text diff=markdown
+*.toml         text
+*.yml          text
+
+.editorconfig  text
+.gitattributes text
+LICENSE        text
