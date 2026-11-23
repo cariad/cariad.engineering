@@ -7,3 +7,12 @@ updates:
     package-ecosystem: github-actions
     schedule:
       interval: weekly
+
+  - cooldown:
+      default-days: 7
+    directories:
+      - /infra/state-backend
+      - /infra/website
+    package-ecosystem: opentofu
+    schedule:
+      interval: weekly
