@@ -32,6 +32,9 @@ jobs:
       - name: Lint Markdown files
         run: mise run lint:markdown
 
+      - name: Lint OpenTofu files
+        run: mise run lint:opentofu
+
       - name: Lint TOML files
         run: mise run lint:toml
 

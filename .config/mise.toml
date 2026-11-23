@@ -4,6 +4,24 @@ min_version = "2026.11.8"
 [settings]
 minimum_release_age = "7d"
 
+[tasks."infra:apply"]
+description = "Apply the website infrastructure"
+dir = "infra/website"
+env = { _.file = ".env" }
+run = "tofu apply"
+
+[tasks."infra:init"]
+description = "Initialise the website infrastructure"
+dir = "infra/website"
+env = { _.file = ".env" }
+run = "tofu init"
+
+[tasks."infra:plan"]
+description = "Plan the website infrastructure"
+dir = "infra/website"
+env = { _.file = ".env" }
+run = "tofu plan"
+
 [tasks.lint]
 description = "Run the linters"
 depends = "lint:*"
@@ -15,6 +33,10 @@ run = "editorconfig-checker"
 [tasks."lint:markdown"]
 description = "Lint Markdown files"
 run = "rumdl check --deny-config-warnings"
+
+[tasks."lint:opentofu"]
+description = "Lint OpenTofu files"
+run = "tofu fmt -check -recursive infra"
 
 [tasks."lint:toml"]
 description = "Lint TOML files"
@@ -30,6 +52,7 @@ run = "zizmor --strict-collection ."
 # Run `mise outdated --bump` to check for updates.
 [tools]
 editorconfig-checker = "4.0.2"  # Lint files against .editorconfig
+opentofu = "1.12.6"             # Deploy and lint the infrastructure
 rumdl = "0.3.4"                 # Lint Markdown files
 tombi = "1.11.2"                # Lint TOML files
 zizmor = "1.32.0"               # Audit GitHub Actions files
